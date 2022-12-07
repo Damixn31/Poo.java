@@ -10,16 +10,30 @@ public class Automovil {
   private int id; // no hay que inicializarlo porque ya parte en cero
   private String fabricante;
   private String modelo;
-  private String color = "gris";
+  private Color color = Color.GRIS;
   private double cilindrada;
   private int capacidadEstanque = 40;
+
+  private TipoAutomovil tipo; 
 
   //atributo estatico
   //static String colorPatente = "Naranja";
 
-  private static String colorPatente = "Naranja";
+  private static Color colorPatente = Color.NARANJO;
   private static int capacidadEstanqueEstatico = 30;
   private static int ultimoId; // no hay que inicializarlo porque ya parte en cero
+
+  // atributo constante final, seria comparable como las variables de entornos, NOTA: si esta en private solo la podemos usar aca 
+  // son constante que no se puede modificar su valor
+  public static final Integer VELOCIDAD_MAX_CARRETERA = 120;
+  public static final int VELOCIDAD_MAX_CIUDAD = 60;
+
+  public static final String COLOR_ROJO = "Rojo";
+  public static final String COLOR_AMARILLO = "Amarillo";
+  public static final String COLOR_AZUL = "Azul";
+  public static final String COLOR_BLANCO = "Blanco";
+  public static final String COLOR_GRIS = "Gris Oscuro";
+
   //constructor
   public Automovil() { // esto se conoce constructor vacio, como sobre carga nos permite crear un objeto ej nissan
     this.id = ++ultimoId;  //hacemos un post incremento para que valla incrementando antes el id
@@ -31,17 +45,17 @@ public class Automovil {
     this.modelo = modelo;
   }
 
-  public Automovil(String fabricante, String modelo, String color) {
+  public Automovil(String fabricante, String modelo, Color color) {
     this(fabricante, modelo); //esto se lo pasa el contructor de arriba para no repetir codigo
     this.color = color;
   }
 
-  public Automovil(String fabricante, String modelo, String color, double cilindrada) {
+  public Automovil(String fabricante, String modelo, Color color, double cilindrada) {
     this(fabricante, modelo, color);
     this.cilindrada = cilindrada;
   }
 
-  public Automovil(String fabricante, String modelo, String color, double cilindrada, int capacidadEstanque) {
+  public Automovil(String fabricante, String modelo, Color color, double cilindrada, int capacidadEstanque) {
     this(fabricante, modelo, color, cilindrada);
     this.capacidadEstanque = capacidadEstanque;
   }
@@ -74,11 +88,11 @@ public class Automovil {
     this.modelo = modelo;
   }
 
-  public String getColor(){
+  public Color getColor(){
     return color;
   }
 
-  public void setColor(String color) {
+  public void setColor(Color color) {
     this.color = color;
   }
 
@@ -98,11 +112,11 @@ public class Automovil {
     this.capacidadEstanque = capacidadEstanque;
   }
 
-  public static String getColorPatente() {
+  public static Color getColorPatente() {
     return colorPatente;
   }
 
-  public static void setColorPatente(String colorPatente) {
+  public static void setColorPatente(Color colorPatente) {
     Automovil.colorPatente = colorPatente; //usamos el nombre de la clase Automovil
   } 
 
@@ -114,6 +128,14 @@ public class Automovil {
     Automovil.capacidadEstanqueEstatico = capacidadEstanqueEstatico;
   }
 
+  public TipoAutomovil getTipo() {
+    return tipo;
+  }
+
+  public void setTipo(TipoAutomovil tipo) {
+    this.tipo = tipo;
+  }
+
 
 // Atributos y metodos los nombres empiezan con minusculas
 // metodos de operacion donde se realizan calculos y consultas
@@ -122,6 +144,7 @@ public class Automovil {
       sb.append("\nauto.id = " + this.id);
       sb.append("\nauto.fabricante = " + this.getFabricante()); //se puede usar de esta manera pasandole el this.getFabricante()
       sb.append("\nauto.modelo = " + this.getModelo());
+      sb.append("\nauto.tipo = " + this.getTipo().getDescripcion());
       sb.append("\nauto.color = " + this.color);// tambien se le puede pasar de esta manera this.color;
       sb.append("\nauto.colorPatente = " + Automovil.colorPatente); // aca esta el atributo estatico
       sb.append("\nauto.cilindrada = " + this.cilindrada);
