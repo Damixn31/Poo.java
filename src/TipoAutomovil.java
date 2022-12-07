@@ -5,7 +5,8 @@ public enum TipoAutomovil {
   PICKUP("Pickup", "Camioneta", 4),
   COUPE("Coupe", "Auto pequeño", 2),
   CONVERTIBLE("Convertible", "Auto deportivo", 2),
-  FURGON("Furgon", "Auto utilitario", 3);
+  FURGON("Furgon", "Auto utilitario", 3),
+  SUV("SUV", "Todo terrreno deportivo", 5);
 
   //Atributos o constatantes
   private final String nombre;

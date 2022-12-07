@@ -1,4 +1,4 @@
-public class Automovil {
+public class Automovil implements Comparable <Automovil>{
   //siempre por standard viene primero los atributos
   // despues el constructor o los constructores
   // despues los metodos getters o setters
@@ -11,8 +11,11 @@ public class Automovil {
   private String fabricante;
   private String modelo;
   private Color color = Color.GRIS;
-  private double cilindrada;
-  private int capacidadEstanque = 40;
+  private Motor motor;
+  private Estanque estanque;
+  private Persona conductor;
+  private Rueda[] ruedas;
+  private int indiceRuedas;
 
   private TipoAutomovil tipo; 
 
@@ -37,6 +40,7 @@ public class Automovil {
   //constructor
   public Automovil() { // esto se conoce constructor vacio, como sobre carga nos permite crear un objeto ej nissan
     this.id = ++ultimoId;  //hacemos un post incremento para que valla incrementando antes el id
+    this.ruedas = new Rueda[5];
   }
 
   public Automovil(String fabricante, String modelo){
@@ -50,14 +54,21 @@ public class Automovil {
     this.color = color;
   }
 
-  public Automovil(String fabricante, String modelo, Color color, double cilindrada) {
+  public Automovil(String fabricante, String modelo, Color color, Motor motor ) {
     this(fabricante, modelo, color);
-    this.cilindrada = cilindrada;
+    this.motor = motor;
   }
 
-  public Automovil(String fabricante, String modelo, Color color, double cilindrada, int capacidadEstanque) {
-    this(fabricante, modelo, color, cilindrada);
-    this.capacidadEstanque = capacidadEstanque;
+  public Automovil(String fabricante, String modelo, Color color, Motor motor , Estanque estanque) {
+    this(fabricante, modelo, color, motor);
+    this.estanque = estanque;
+  }
+
+  //Constructor para inicialize todo
+  public Automovil(String fabricante, String modelo, Color color, Motor motor, Estanque estanque, Persona conductor, Rueda[] ruedas) {
+    this(fabricante, modelo, color, motor, estanque);
+    this.conductor = conductor;
+    this.ruedas = ruedas;
   }
 
   //  metodo para leer y modificar se los conoce como metodos get
@@ -96,22 +107,6 @@ public class Automovil {
     this.color = color;
   }
 
-  public double getCilindrada(){
-    return this.cilindrada;
-  }
-
-  public void setCilindrada(double cilindrada) {
-    this.cilindrada = cilindrada;
-  }
-
-  public int getCapacidadEstanque(){
-    return this.capacidadEstanque;
-  }
-
-  public void setCapacidadEstanque(int capacidadEstanque) {
-    this.capacidadEstanque = capacidadEstanque;
-  }
-
   public static Color getColorPatente() {
     return colorPatente;
   }
@@ -136,19 +131,79 @@ public class Automovil {
     this.tipo = tipo;
   }
 
+  public Motor getMotor() {
+    return motor;
+  }
+
+  public void setMotor(Motor motor) {
+    this.motor = motor;
+  }
+
+  public Estanque getEstanque() {
+    if(estanque == null) {
+        this.estanque = new Estanque();
+    }
+    return estanque;
+  }
+
+  public void setEstanque(Estanque estanque) {
+    this.estanque = estanque;
+  }
+
+  public Persona getConductor() {
+    return conductor;
+  }
+
+  public void setConductor(Persona conductor) {
+    this.conductor = conductor;
+  }
+
+  public Rueda[] getRuedas() {
+    return ruedas;
+  }
+
+  public void setRuedas(Rueda[] ruedas) {
+    this.ruedas = ruedas;
+  }
+
+  //implementando el medotodo add va agregando de a uno
+  public Automovil addRueda(Rueda rueda) {
+    if(indiceRuedas < this.ruedas.length) { //como el valor del arreglo es 5 nos si le agregamos 10 va a tirar error entonces con este if lo que hace es que el error desaparesca pero sigue mostrando los 5 y no se sobrepasa
+       this.ruedas[indiceRuedas++] = rueda; // mete un post incremento y va aumentando en uno
+    }
+    return this; // esto retorna el mismo objeto de la clase de esta manera invocamos addRueda de manera encandenada
+  }
+
 
 // Atributos y metodos los nombres empiezan con minusculas
 // metodos de operacion donde se realizan calculos y consultas
   public String detalle(){
-    StringBuilder sb = new StringBuilder();
-      sb.append("\nauto.id = " + this.id);
-      sb.append("\nauto.fabricante = " + this.getFabricante()); //se puede usar de esta manera pasandole el this.getFabricante()
-      sb.append("\nauto.modelo = " + this.getModelo());
-      sb.append("\nauto.tipo = " + this.getTipo().getDescripcion());
-      sb.append("\nauto.color = " + this.color);// tambien se le puede pasar de esta manera this.color;
-      sb.append("\nauto.colorPatente = " + Automovil.colorPatente); // aca esta el atributo estatico
-      sb.append("\nauto.cilindrada = " + this.cilindrada);
-      return sb.toString();
+    String cadenaDetalle = "auto.id = " + this.id +
+      "\nauto.fabricante = " + this.getFabricante() +
+      "\nauto.modelo = " + this.getModelo();
+
+    if(this.getTipo() != null) {
+      cadenaDetalle += "\nauto.tipo = " + this.getTipo().getDescripcion();
+    }
+
+    cadenaDetalle += "\nauto.color = " + this.color +
+      "\nauto.patenteColor = " + colorPatente;
+    if(this.motor != null) {
+        cadenaDetalle +=  "\nauto.cilindrada = " + this.motor.getCilindrada();
+    }
+    //comprobar si el conductor existe
+    if(conductor != null) {
+       cadenaDetalle += "\nConductor subaru: " + this.getConductor();
+    }
+
+    if(getRuedas() != null) {
+      cadenaDetalle += "\nRuedas del automovil: ";
+      for(Rueda r: this.getRuedas()) {
+        cadenaDetalle +=  "\n" + r.getFabricante() + ", aro: " + r.getAro() + ", ancho: " + r.getAncho();
+      }
+    }
+
+    return cadenaDetalle;
   }
 
   public String acelerar(int rpm) {
@@ -166,11 +221,11 @@ public class Automovil {
   }
 
   public float calcularConsumo(int km, float porcentajeBencina) {
-    return km/(capacidadEstanque*porcentajeBencina);
+    return km/(this.getEstanque().getCapacidad() * porcentajeBencina);
   } 
 
   public float calcularConsumo(int km, int porcentajeBencina) {
-    return km/(capacidadEstanque*porcentajeBencina/100f);
+    return km/(this.getEstanque().getCapacidad() * porcentajeBencina/100f);
   }
  
   // estatico no puedo usar usar atributo comunes tiene que ser estaticos esto nos daria error porque capacidadEstanque es atributo que no es estatico
@@ -196,6 +251,11 @@ public class Automovil {
   @Override
   public String toString() {
     return this.id + " : " + fabricante + " " + modelo;
+  }
+
+  @Override
+  public int compareTo(Automovil a) { // esta comparacion cuando queremos comparar o ordenar de la clase Arrays.sort()
+    return this.fabricante.compareTo(a.fabricante);
   }
 
 

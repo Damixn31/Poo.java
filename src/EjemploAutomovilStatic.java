@@ -5,19 +5,22 @@ public class EjemploAutomovilStatic {
 
         // subaru
         Automovil subaru = new Automovil("Subaru", "Impreza");
-        subaru.setCilindrada(2.0);
+        subaru.setMotor(new Motor(2.0, TipoMotor.BENCINA));
+        subaru.setEstanque(new Estanque());
         subaru.setColor(Color.BLANCO);
         subaru.setTipo(TipoAutomovil.HATCHBACK);
 
         // mazda
-        Automovil mazda = new Automovil("Mazda", "BT-50", Color.ROJO, 3.0);
+        Automovil mazda = new Automovil("Mazda", "BT-50", Color.ROJO, new Motor(3.0, TipoMotor.DIESEL));
         mazda.setTipo(TipoAutomovil.PICKUP);
+        //mazda.setEstanque(new Estanque()); //esta es una de las soluciones del error NullPointerException porque no le pasamos Estanque 
+        // otra solucion seria ir al Automovil y pasarle a calcularConsumo el metodo this.getEstanque() y despues ir al petodo y hacer un if y preguntar si es null
         System.out.println("mazda.fabricante = " + mazda.getFabricante());
 
         // nissan
-        Automovil nissan = new Automovil("Nissan", "Navara", Color.GRIS, 3.5, 50);
+        Automovil nissan = new Automovil("Nissan", "Navara", Color.GRIS, new Motor(4.0, TipoMotor.DIESEL), new Estanque(50));
         nissan.setTipo(TipoAutomovil.PICKUP);
-        Automovil nissan2 = new Automovil("Nissan", "Navara", Color.GRIS, 3.5, 50);
+        Automovil nissan2 = new Automovil("Nissan", "Navara", Color.GRIS, new Motor(3.5, TipoMotor.BENCINA), new Estanque(50));
 
 
         nissan2.setColor(Color.AMARILLO);// aca seria distinto porque este atriburo es propio del objeto, solamente cambia para el
@@ -41,6 +44,8 @@ public class EjemploAutomovilStatic {
         TipoAutomovil tipoSubaru = subaru.getTipo();
         System.out.println("tipo subaru: " + tipoSubaru.getNombre());
         System.out.println("tipo desc. subaru: " + tipoSubaru.getDescripcion());
+
+        System.out.println(mazda.calcularConsumo(300, 70));
 
    }
 }
